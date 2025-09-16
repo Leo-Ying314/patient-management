@@ -1,4 +1,4 @@
-package io.github.leoying314.patient_service;
+package io.github.leoying314.patientservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

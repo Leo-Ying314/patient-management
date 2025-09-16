@@ -1,4 +1,4 @@
-package io.github.leoying314.patient_service;
+package io.github.leoying314.patientservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
