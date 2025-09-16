@@ -1,9 +1,10 @@
 package io.github.leoying314.patientservice.mapper;
 
-import io.github.leoying314.patientservice.dto.PatientDto;
+import io.github.leoying314.patientservice.dto.PatientRequestDto;
+import io.github.leoying314.patientservice.dto.PatientResponseDto;
 import io.github.leoying314.patientservice.model.Patient;
 
 public interface PatientMapper {
-    Patient fromDto(PatientDto patientDto);
-    PatientDto toDto(Patient patient);
+    Patient fromDto(PatientRequestDto patientRequestDto);
+    PatientResponseDto toDto(Patient patient);
 }

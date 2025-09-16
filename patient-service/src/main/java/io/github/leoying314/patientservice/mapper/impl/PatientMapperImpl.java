@@ -1,25 +1,30 @@
 package io.github.leoying314.patientservice.mapper.impl;
 
-import io.github.leoying314.patientservice.dto.PatientDto;
+import io.github.leoying314.patientservice.dto.PatientRequestDto;
+import io.github.leoying314.patientservice.dto.PatientResponseDto;
 import io.github.leoying314.patientservice.mapper.PatientMapper;
 import io.github.leoying314.patientservice.model.Patient;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
+@RequiredArgsConstructor
 public class PatientMapperImpl implements PatientMapper {
     @Override
-    public Patient fromDto(PatientDto patientDto) {
+    public Patient fromDto(PatientRequestDto patientRequestDto) {
         return new Patient(
-                patientDto.id(),
-                patientDto.name(),
-                patientDto.email(),
-                patientDto.address(),
-                patientDto.dateOfBirth(),
-                null
+                null,
+                patientRequestDto.name(),
+                patientRequestDto.email(),
+                patientRequestDto.address(),
+                patientRequestDto.dateOfBirth(),
+                patientRequestDto.registeredDate()
         );
     }
 
     @Override
-    public PatientDto toDto(Patient patient) {
-        return new PatientDto(
+    public PatientResponseDto toDto(Patient patient) {
+        return new PatientResponseDto(
                 patient.getId(),
                 patient.getName(),
                 patient.getEmail(),
