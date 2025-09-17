@@ -1,21 +1,38 @@
 spring:
   application:
     name: patient-service
-  h2:
-    console:
-      path: /h2-console
+
+# UNCOMMENT TO USE IN-MEM DB OUTSIDE OF DOCKER
+#  h2:
+#    console:
+#      path: /h2-console
+#  datasource:
+#    url: jdbc:h2:mem:testdb
+#    driver-class-name: org.h2.Driver
+#    username: admin_viewer
+#    password: password
+#  jpa:
+#    database-platform: org.hibernate.dialect.H2Dialect
+#    hibernate:
+#      ddl-auto: update
+#  sql:
+#    init:
+#      mode: always
+
   datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: admin_viewer
+    url: jdbc:postgresql://patient-service-db:5432/db
+    username: admin_user
     password: password
+    driver-class-name: org.postgresql.Driver
+
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
-  sql:
-    init:
-      mode: always
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 server:
   port: 4000
+
+logging:
+  level:
+    root: info
