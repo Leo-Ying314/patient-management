@@ -22,7 +22,10 @@ public record PatientRequestDto(
         @NotNull(message = "Date of birth is required")
         LocalDate dateOfBirth,
 
-        @NotNull(message = "Registered date is required")
+        @NotNull(
+                groups = {ValidationGroups.OnCreate.class},
+                message = "Registered date is required"
+        )
         LocalDate registeredDate
 ) {
 }
