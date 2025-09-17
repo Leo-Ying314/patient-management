@@ -3,7 +3,7 @@ package io.github.leoying314.patientservice.dto;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public record PatientResponseDto(
+public record PatientResponseDTO(
         UUID id,
         String name,
         String email,

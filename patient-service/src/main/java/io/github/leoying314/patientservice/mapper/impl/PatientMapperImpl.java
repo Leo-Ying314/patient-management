@@ -1,7 +1,7 @@
 package io.github.leoying314.patientservice.mapper.impl;
 
-import io.github.leoying314.patientservice.dto.PatientRequestDto;
-import io.github.leoying314.patientservice.dto.PatientResponseDto;
+import io.github.leoying314.patientservice.dto.PatientRequestDTO;
+import io.github.leoying314.patientservice.dto.PatientResponseDTO;
 import io.github.leoying314.patientservice.mapper.PatientMapper;
 import io.github.leoying314.patientservice.model.Patient;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class PatientMapperImpl implements PatientMapper {
     @Override
-    public Patient fromDto(PatientRequestDto patientRequestDto) {
+    public Patient fromDTO(PatientRequestDTO patientRequestDto) {
         return new Patient(
                 null,
                 patientRequestDto.name(),
@@ -23,8 +23,8 @@ public class PatientMapperImpl implements PatientMapper {
     }
 
     @Override
-    public PatientResponseDto toDto(Patient patient) {
-        return new PatientResponseDto(
+    public PatientResponseDTO toDTO(Patient patient) {
+        return new PatientResponseDTO(
                 patient.getId(),
                 patient.getName(),
                 patient.getEmail(),

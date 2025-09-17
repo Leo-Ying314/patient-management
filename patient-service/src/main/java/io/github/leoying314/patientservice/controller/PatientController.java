@@ -1,12 +1,14 @@
 package io.github.leoying314.patientservice.controller;
 
-import io.github.leoying314.patientservice.dto.PatientRequestDto;
-import io.github.leoying314.patientservice.dto.PatientResponseDto;
+import io.github.leoying314.patientservice.dto.PatientRequestDTO;
+import io.github.leoying314.patientservice.dto.PatientResponseDTO;
 import io.github.leoying314.patientservice.dto.ValidationGroups;
 import io.github.leoying314.patientservice.mapper.PatientMapper;
+import io.github.leoying314.patientservice.model.Patient;
 import io.github.leoying314.patientservice.service.PatientService;
 import jakarta.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,32 +23,38 @@ public class PatientController {
     private final PatientMapper patientMapper;
 
     @GetMapping
-    public List<PatientResponseDto> getPatients() {
-        return patientService.getPatients()
+    public ResponseEntity<List<PatientResponseDTO>> getPatients() {
+        List<PatientResponseDTO> patientDTOs = patientService.getPatients()
                 .stream()
-                .map(patientMapper::toDto)
+                .map(patientMapper::toDTO)
                 .toList();
+        return ResponseEntity.ok().body(patientDTOs);
     }
 
     @PostMapping
-    public PatientResponseDto createPatient(
-            @Validated({Default.class, ValidationGroups.OnCreate.class}) @RequestBody PatientRequestDto patientRequestDto
+    public ResponseEntity<PatientResponseDTO> createPatient(
+            @Validated({Default.class, ValidationGroups.OnCreate.class}) @RequestBody PatientRequestDTO patientRequestDTO
     ) {
-        return patientMapper.toDto(patientService.createPatient(patientRequestDto));
+        Patient newPatient = patientService.createPatient(patientRequestDTO);
+        PatientResponseDTO newPatientDTO = patientMapper.toDTO(newPatient);
+        return ResponseEntity.ok().body(newPatientDTO);
     }
 
     @PutMapping(path="/{id}")
-    public PatientResponseDto updatePatient(
+    public ResponseEntity<PatientResponseDTO> updatePatient(
             @PathVariable("id") UUID patientID,
-            @Validated({Default.class}) @RequestBody PatientRequestDto patientRequestDto
+            @Validated({Default.class}) @RequestBody PatientRequestDTO patientRequestDTO
     ) {
-        return patientMapper.toDto(patientService.updatePatient(patientID, patientRequestDto));
+        Patient updatedPatient = patientService.updatePatient(patientID, patientRequestDTO);
+        PatientResponseDTO updatedPatientDTO = patientMapper.toDTO(updatedPatient);
+        return ResponseEntity.ok().body(updatedPatientDTO);
     }
 
     @DeleteMapping(path="/{id}")
-    public void deletePatient(
+    public ResponseEntity<Void> deletePatient(
             @PathVariable("id") UUID patientId
     ) {
         patientService.deletePatient(patientId);
+        return ResponseEntity.noContent().build();
     }
 }

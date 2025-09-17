@@ -1,6 +1,6 @@
 package io.github.leoying314.patientservice.service.impl;
 
-import io.github.leoying314.patientservice.dto.PatientRequestDto;
+import io.github.leoying314.patientservice.dto.PatientRequestDTO;
 import io.github.leoying314.patientservice.exception.EmailAlreadyExistsException;
 import io.github.leoying314.patientservice.exception.PatientNotFoundException;
 import io.github.leoying314.patientservice.mapper.PatientMapper;
@@ -26,16 +26,16 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Patient createPatient(PatientRequestDto patientRequestDto) {
+    public Patient createPatient(PatientRequestDTO patientRequestDto) {
         if (patientRepository.existsByEmail(patientRequestDto.email())) {
             throw new EmailAlreadyExistsException("A patient with this email already exists: " + patientRequestDto.email());
         }
 
-        return patientRepository.save(patientMapper.fromDto(patientRequestDto));
+        return patientRepository.save(patientMapper.fromDTO(patientRequestDto));
     }
 
     @Override
-    public Patient updatePatient(UUID patientId, PatientRequestDto patientRequestDto) {
+    public Patient updatePatient(UUID patientId, PatientRequestDTO patientRequestDto) {
         Patient existingPatient = patientRepository.findById(patientId).orElseThrow(() ->
                 new PatientNotFoundException("Patient not found with ID: " + patientId));
 
