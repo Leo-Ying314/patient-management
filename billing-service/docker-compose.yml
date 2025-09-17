@@ -1,0 +1,16 @@
+services:
+  billing-service:
+    build:
+      context: /Users/leoying/spring-boot/patient-management/billing-service
+      dockerfile: Dockerfile
+    image: billing-service:latest
+    container_name: billing-service
+    ports:
+      - "4001:4001"
+      - "9001:9001"
+    networks:
+      - internal
+
+networks:
+  internal:
+    driver: bridge
