@@ -42,4 +42,11 @@ public class PatientController {
     ) {
         return patientMapper.toDto(patientService.updatePatient(patientID, patientRequestDto));
     }
+
+    @DeleteMapping(path="/{id}")
+    public void deletePatient(
+            @PathVariable("id") UUID patientId
+    ) {
+        patientService.deletePatient(patientId);
+    }
 }

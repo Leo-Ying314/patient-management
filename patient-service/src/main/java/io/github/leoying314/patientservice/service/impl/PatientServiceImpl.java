@@ -39,7 +39,7 @@ public class PatientServiceImpl implements PatientService {
         Patient existingPatient = patientRepository.findById(patientId).orElseThrow(() ->
                 new PatientNotFoundException("Patient not found with ID: " + patientId));
 
-        // Perform validation only when email is not unique *and* belongs to another user
+        // Perform validation only when email is not unique *and* belongs to another patient
         if (!patientRequestDto.email().equals(existingPatient.getEmail()) && patientRepository.existsByEmail(patientRequestDto.email())) {
             throw new EmailAlreadyExistsException("A patient with this email already exists: " + patientRequestDto.email());
         }
@@ -50,5 +50,10 @@ public class PatientServiceImpl implements PatientService {
         existingPatient.setDateOfBirth(patientRequestDto.dateOfBirth());
 
         return patientRepository.save(existingPatient);
+    }
+
+    @Override
+    public void deletePatient(UUID patientId) {
+        patientRepository.deleteById(patientId);
     }
 }

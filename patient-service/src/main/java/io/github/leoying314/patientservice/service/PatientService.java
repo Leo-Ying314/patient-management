@@ -10,4 +10,5 @@ public interface PatientService {
     List<Patient> getPatients();
     Patient createPatient(PatientRequestDto patientRequestDto);
     Patient updatePatient(UUID patientId, PatientRequestDto patientRequestDto);
+    void deletePatient(UUID patientId);
 }
