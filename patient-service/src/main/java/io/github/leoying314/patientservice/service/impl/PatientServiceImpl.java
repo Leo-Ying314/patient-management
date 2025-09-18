@@ -1,8 +1,10 @@
 package io.github.leoying314.patientservice.service.impl;
 
+import billing.BillingServiceGrpc;
 import io.github.leoying314.patientservice.dto.PatientRequestDTO;
 import io.github.leoying314.patientservice.exception.EmailAlreadyExistsException;
 import io.github.leoying314.patientservice.exception.PatientNotFoundException;
+import io.github.leoying314.patientservice.grpc.BillingServiceGrpcClient;
 import io.github.leoying314.patientservice.mapper.PatientMapper;
 import io.github.leoying314.patientservice.model.Patient;
 import io.github.leoying314.patientservice.repository.PatientRepository;
@@ -19,6 +21,7 @@ public class PatientServiceImpl implements PatientService {
 
     private final PatientRepository patientRepository;
     private final PatientMapper patientMapper;
+    private final BillingServiceGrpcClient billingServiceGrpcClient;
 
     @Override
     public List<Patient> getPatients() {
@@ -31,7 +34,11 @@ public class PatientServiceImpl implements PatientService {
             throw new EmailAlreadyExistsException("A patient with this email already exists: " + patientRequestDto.email());
         }
 
-        return patientRepository.save(patientMapper.fromDTO(patientRequestDto));
+        Patient newPatient = patientRepository.save(patientMapper.fromDTO(patientRequestDto));
+
+        billingServiceGrpcClient.createBillingAccount(newPatient.getId().toString(), newPatient.getName(), newPatient.getEmail());
+
+        return newPatient;
     }
 
     @Override
