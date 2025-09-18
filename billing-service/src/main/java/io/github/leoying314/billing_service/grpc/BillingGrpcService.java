@@ -1,6 +1,5 @@
 package io.github.leoying314.billing_service.grpc;
 
-import billing.BillingRequest;
 import billing.BillingResponse;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +8,7 @@ import billing.BillingServiceGrpc.BillingServiceImplBase;
 
 @Slf4j
 @GrpcService
-public class BillingGrpcServiceImpl extends BillingServiceImplBase {
+public class BillingGrpcService extends BillingServiceImplBase {
 
     @Override
     public void createBillingAccount(
