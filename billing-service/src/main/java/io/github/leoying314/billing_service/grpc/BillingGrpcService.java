@@ -1,11 +1,11 @@
-package io.github.leoying314.billing_service.grpc.impl;
+package io.github.leoying314.billing_service.grpc;
 
+import billing.BillingRequest;
 import billing.BillingResponse;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import billing.BillingServiceGrpc.BillingServiceImplBase;
-import org.apache.coyote.Response;
 
 @Slf4j
 @GrpcService
