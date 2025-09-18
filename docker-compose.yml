@@ -25,8 +25,22 @@ services:
       SPRING_DATASOURCE_USERNAME: admin_user
       SPRING_DATASOURCE_PASSWORD: password
       SPRING_SQL_INIT_MODE: always
+      BILLING_SERVICE_ADDRESS: billing-service
+      BILLING_SERVICE_GRPC_PORT: 9001
     depends_on:
       - patient-service-db
+    networks:
+      - internal
+
+  billing-service:
+    build:
+      context: /Users/leoying/spring-boot/patient-management/billing-service
+      dockerfile: Dockerfile
+    image: billing-service:latest
+    container_name: billing-service
+    ports:
+      - "4001:4001"
+      - "9001:9001"
     networks:
       - internal
 
