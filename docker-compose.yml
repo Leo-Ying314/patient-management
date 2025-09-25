@@ -17,6 +17,7 @@ services:
     build:
       context: /Users/leoying/spring-boot/patient-management/patient-service
       dockerfile: Dockerfile
+    image: patient-service:latest
     container_name: patient-service
     ports:
       - "4000:4000"
@@ -42,6 +43,19 @@ services:
     ports:
       - "4001:4001"
       - "9001:9001"
+    networks:
+      - internal
+
+  analytics-service:
+    build:
+      context: /Users/leoying/spring-boot/patient-management/analytics-service
+      dockerfile: Dockerfile
+    image: analytics-service:latest
+    container_name: analytics-service
+    ports:
+      - "4002:4002"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     networks:
       - internal
 
