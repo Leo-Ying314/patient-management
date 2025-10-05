@@ -60,6 +60,7 @@ services:
       SPRING_DATASOURCE_USERNAME: admin_user
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_SQL_INIT_MODE: always
+      JWT_SECRET: ZGVzaWduZGF1Z2h0ZXJzdHVkeWluZ3BsZWFzYW50ZWxlY3RyaWN3b3JrZHVsbHdpbnQ=
     networks:
       - internal
 
