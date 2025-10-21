@@ -5,7 +5,21 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - "/Users/leoying/spring-boot/patient-management/db_volumes/patient-service-db:/var/lib/postgresql/data"
+      - patient-service-db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: admin_user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db
+    networks:
+      - internal
+
+  auth-service-db:
+    image: postgres:latest
+    container_name: auth-service-db
+    ports:
+      - "5434:5432"
+    volumes:
+      - auth-service-db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: admin_user
       POSTGRES_PASSWORD: password
@@ -19,8 +33,6 @@ services:
       dockerfile: Dockerfile
     image: patient-service:latest
     container_name: patient-service
-#    ports:
-#      - "4000:4000"
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       SPRING_DATASOURCE_URL: jdbc:postgresql://patient-service-db:5432/db
@@ -31,6 +43,24 @@ services:
       BILLING_SERVICE_GRPC_PORT: 9001
     depends_on:
       - patient-service-db
+    networks:
+      - internal
+
+  auth-service:
+    build:
+      context: /Users/leoying/spring-boot/patient-management/auth-service
+      dockerfile: Dockerfile
+    image: auth-service:latest
+    container_name: auth-service
+    ports:
+      - "4005:4005"
+    environment:
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_DATASOURCE_URL: jdbc:postgresql://auth-service-db:5432/db
+      SPRING_DATASOURCE_USERNAME: admin_user
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_SQL_INIT_MODE: always
+      JWT_SECRET: ZGVzaWduZGF1Z2h0ZXJzdHVkeWluZ3BsZWFzYW50ZWxlY3RyaWN3b3JrZHVsbHdpbnQ=
     networks:
       - internal
 
@@ -60,19 +90,24 @@ services:
       - internal
 
   kafka:
-    image: bitnami/kafka:latest
+    image: apache/kafka:latest
     container_name: kafka
     ports:
       - "9092:9092"
       - "9094:9094"
     environment:
-      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,EXTERNAL://localhost:9094
-      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 0@kafka:9093
-      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
-      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
-      KAFKA_CFG_NODE_ID: 0
-      KAFKA_CFG_PROCESS_ROLES: controller,broker
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://localhost:9092,CONTROLLER://localhost:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_NUM_PARTITIONS: 3
     networks:
       - internal
 
@@ -84,9 +119,15 @@ services:
     container_name: api-gateway
     ports:
       - "4004:4004"
+    environment:
+      AUTH_SERVICE_URL: http://auth-service:4005
     networks:
       - internal
 
 networks:
   internal:
     driver: bridge
+
+volumes:
+  patient-service-db-data:
+  auth-service-db-data:
