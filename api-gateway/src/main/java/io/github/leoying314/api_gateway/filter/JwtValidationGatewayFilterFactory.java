@@ -16,7 +16,7 @@ public class JwtValidationGatewayFilterFactory extends AbstractGatewayFilterFact
 
     public JwtValidationGatewayFilterFactory(
             WebClient.Builder webClientBuilder,
-            @Value("${auth.service.url") String authServiceUrl
+            @Value("${auth.service.url}") String authServiceUrl
     ) {
         this.webClient = webClientBuilder.baseUrl(authServiceUrl).build();
     }
@@ -32,7 +32,7 @@ public class JwtValidationGatewayFilterFactory extends AbstractGatewayFilterFact
             }
 
             return webClient.get()
-                    .uri("/validate")
+                    .uri("/auth/validate")
                     .header(HttpHeaders.AUTHORIZATION, token)
                     .retrieve()
                     .toBodilessEntity()
